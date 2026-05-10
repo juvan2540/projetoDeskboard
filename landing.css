@@ -87,7 +87,7 @@ body {
 /* Hero */
 .hero {
     height: 80vh;
-    background: url('../modern_electronics_repair_bench_1778433560573.png') center/cover no-repeat;
+    background: url('modern_electronics_repair_bench.png') center/cover no-repeat;
     display: flex;
     align-items: center;
     position: relative;
