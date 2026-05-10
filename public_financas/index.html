@@ -3,165 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JucaAssistência - Especialista em Smartphones e Eletrônicos</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="landing.css">
+    <title>JucaFinanças - Controle Pessoal</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <!-- Header/Navigation -->
-    <header class="navbar">
-        <div class="container flex-nav">
-            <div class="logo">
-                <span class="logo-icon">📱</span>
-                <span class="logo-text">Juca<span>Assistência</span></span>
-            </div>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#inicio">Início</a></li>
-                    <li><a href="#servicos">Serviços</a></li>
-                    <li><a href="#consulta">Consultar OS</a></li>
-                    <li><a href="https://wa.me/5500000000000" class="btn-cta-nav">Orçamento WhatsApp</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <div class="container">
+        <header>
+            <h1>JucaFinanças 💰</h1>
+            <p>Controle Financeiro Pessoal</p>
+        </header>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="hero">
-        <div class="hero-overlay"></div>
-        <div class="container hero-content">
-            <span class="badge">Especialista em Apple, Samsung e Xiaomi</span>
-            <h1>Seu dispositivo em <span>mãos de mestre.</span></h1>
-            <p>Reparos rápidos, peças premium e garantia total. Devolvendo a vida ao seu eletrônico com a precisão que ele merece.</p>
-            <div class="hero-btns">
-                <a href="https://wa.me/5500000000000" class="btn-primary-large">Pedir Orçamento Agora</a>
-                <a href="#consulta" class="btn-secondary-large">Acompanhar Reparo</a>
+        <section class="summary-grid">
+            <div class="glass-card summary-item">
+                <h3>Saldo Total</h3>
+                <p id="total-balance" class="amount balance">R$ 0,00</p>
             </div>
-        </div>
-    </section>
+            <div class="glass-card summary-item">
+                <h3>Receitas</h3>
+                <p id="total-income" class="amount income">R$ 0,00</p>
+            </div>
+            <div class="glass-card summary-item">
+                <h3>Despesas</h3>
+                <p id="total-expense" class="amount expense">R$ 0,00</p>
+            </div>
+        </section>
 
-    <!-- Services Section -->
-    <section id="servicos" class="services">
-        <div class="container">
-            <div class="section-title">
-                <h2>Nossos <span>Serviços</span></h2>
-                <p>Equipamentos de última geração para garantir o melhor reparo do mercado.</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">📺</div>
-                    <h3>Troca de Tela</h3>
-                    <p>Displays originais e primeira linha com cores vivas e touch impecável.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">🔋</div>
-                    <h3>Baterias</h3>
-                    <p>Saúde 100% e autonomia de volta. Baterias com selo de qualidade.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">⚡</div>
-                    <h3>Conector de Carga</h3>
-                    <p>Seu aparelho não carrega? Resolvemos com solda de precisão.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">📟</div>
-                    <h3>Reparo em Placa</h3>
-                    <p>Nível avançado de micro-soldagem para aparelhos que "não ligam".</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- OS Consultation Section -->
-    <section id="consulta" class="consult-section">
-        <div class="container">
-            <div class="consult-card">
-                <div class="consult-info">
-                    <h2>Consulte o Status do seu <span>Aparelho</span></h2>
-                    <p>Digite o número da sua Ordem de Serviço (OS) para saber em que etapa está o seu conserto.</p>
-                    <div class="search-group">
-                        <input type="text" id="os-number" placeholder="Ex: 171543298">
-                        <button onclick="checkOSStatus()">Consultar Agora</button>
+        <div class="main-grid">
+            <section class="glass-card">
+                <h3>Nova Transação</h3>
+                <form id="transaction-form">
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <input type="text" id="desc" placeholder="Ex: Salário, Aluguel..." required>
                     </div>
-                    <div id="os-result" class="os-result-box"></div>
-                </div>
-                <div class="consult-image">
-                    <img src="https://img.icons8.com/bubbles/200/search.png" alt="Search icon">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container footer-grid">
-            <div class="footer-brand">
-                <h3>Juca<span>Assistência</span></h3>
-                <p>Qualidade, transparência e rapidez.</p>
-            </div>
-            <div class="footer-info">
-                <h4>Onde Estamos</h4>
-                <p>📍 Sua Rua, Nº 123 - Bairro - Cidade/UF</p>
-                <p>⏰ Seg a Sex: 09h às 18h | Sáb: 09h às 13h</p>
-            </div>
-            <div class="footer-contact">
-                <h4>Contato</h4>
-                <p>📞 (00) 0000-0000</p>
-                <p>📧 contato@jucaassistencia.com.br</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 JucaAssistência. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/5500000000000" class="whatsapp-float" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-    </a>
-
-    <script>
-        function checkOSStatus() {
-            const osNum = document.getElementById('os-number').value.trim();
-            const resultBox = document.getElementById('os-result');
-            
-            if (!osNum) {
-                resultBox.innerHTML = '<p class="error">Por favor, digite o número da OS.</p>';
-                resultBox.style.display = 'block';
-                return;
-            }
-
-            // Get data from localStorage (shared with management app)
-            const transactions = JSON.parse(localStorage.getItem('assistencia_transactions')) || [];
-            const service = transactions.find(t => t.id.toString() === osNum || t.id.toString().includes(osNum));
-
-            if (service) {
-                let statusMsg = "";
-                let color = "";
-                
-                switch(service.status) {
-                    case 'Aguardando': statusMsg = "🟠 Orçamento em análise"; color = "#f59e0b"; break;
-                    case 'Em Manutenção': statusMsg = "🔵 Aparelho na bancada (Em reparo)"; color = "#3b82f6"; break;
-                    case 'Pronto': statusMsg = "🟢 Pronto para retirada! 🎉"; color = "#10b981"; break;
-                    case 'Entregue': statusMsg = "✅ Aparelho entregue ao cliente"; color = "#64748b"; break;
-                    default: statusMsg = "✅ Finalizado"; color = "#10b981";
-                }
-
-                resultBox.innerHTML = `
-                    <div class="success-os">
-                        <h4>Olá, ${service.customer}!</h4>
-                        <p>Status da OS #${service.id}:</p>
-                        <div class="status-badge-web" style="background: ${color}">${statusMsg}</div>
-                        <p style="margin-top: 10px; font-size: 0.9rem;">Aparelho: ${service.description.split('|')[0].replace('Serviço:', '')}</p>
+                    <div class="form-group">
+                        <label>Valor (R$)</label>
+                        <input type="number" id="amount" step="0.01" placeholder="0.00" required>
                     </div>
-                `;
-            } else {
-                resultBox.innerHTML = '<p class="error">Ordem de Serviço não encontrada. Verifique o número e tente novamente.</p>';
-            }
-            resultBox.style.display = 'block';
-        }
-    </script>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="category">
+                            <option value="Receita">Receita</option>
+                            <option value="Alimentação">Alimentação</option>
+                            <option value="Moradia">Moradia</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Lazer">Lazer</option>
+                            <option value="Saúde">Saúde</option>
+                            <option value="Educação">Educação</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+                    <button type="submit">Adicionar Transação</button>
+                </form>
+            </section>
+
+            <section class="glass-card history-section">
+                <h3>Histórico</h3>
+                <div id="transaction-list" class="transaction-list">
+                    <!-- Transações serão inseridas aqui -->
+                </div>
+            </section>
+        </div>
+
+        <footer style="margin-top: 3rem; text-align: center; padding-bottom: 2rem;">
+            <p style="color: #64748b; font-size: 0.8rem;">JucaFinanças &copy; 2026</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
 </body>
 </html>
