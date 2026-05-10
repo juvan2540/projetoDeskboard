@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JucaFinanças - Gestão Avançada de Finanças</title>
+    <meta name="description" content="Dashboard financeiro premium para controle de receitas e despesas com gráficos e persistência local.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JucaFinanças</h1>
+            <p>Sua central de controle financeiro avançado</p>
+        </header>
+
+        <section class="summary-grid">
+            <div class="glass-card summary-item">
+                <h3>Saldo Atual</h3>
+                <p id="total-balance" class="amount balance">R$ 0,00</p>
+            </div>
+            <div class="glass-card summary-item">
+                <h3>Total Receitas</h3>
+                <p id="total-income" class="amount income">R$ 0,00</p>
+            </div>
+            <div class="glass-card summary-item">
+                <h3>Total Despesas</h3>
+                <p id="total-expenses" class="amount expense">R$ 0,00</p>
+            </div>
+        </section>
+
+        <div class="main-grid">
+            <section class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>Distribuição de Gastos</h3>
+                    <select id="chart-type" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                        <option value="doughnut">Rosca</option>
+                        <option value="bar">Barras</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="expenseChart"></canvas>
+                </div>
+            </section>
+
+            <aside class="glass-card">
+                <h3>Nova Transação</h3>
+                <form id="transaction-form">
+                    <div class="form-group">
+                        <label for="description">Descrição</label>
+                        <input type="text" id="description" placeholder="Ex: Conta de Luz" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Valor (R$)</label>
+                        <input type="number" id="amount" step="0.01" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Categoria</label>
+                        <select id="category" required>
+                            <option value="Moradia">🏠 Moradia (Aluguel/Imóvel)</option>
+                            <option value="Serviços">⚡ Serviços (Luz/Água)</option>
+                            <option value="Comunicação">🌐 Internet/Telefone</option>
+                            <option value="Alimentação">🛒 Alimentação</option>
+                            <option value="Transporte">🚗 Transporte</option>
+                            <option value="Nubank">💳 Cartão Nubank</option>
+                            <option value="Santander">💳 Cartão Santander</option>
+                            <option value="Salário">💰 Salário (Receita)</option>
+                            <option value="Vale Alimentação">🍱 Vale Alimentação (Receita)</option>
+                            <option value="Investimentos">📈 Investimentos</option>
+                            <option value="Lazer">🍿 Lazer</option>
+                            <option value="Outros">⚙️ Outros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Tipo</label>
+                        <select id="type" required>
+                            <option value="expense">Despesa</option>
+                            <option value="income">Receita</option>
+                        </select>
+                    </div>
+                    <button type="submit">Adicionar Transação</button>
+                </form>
+
+                <div style="margin-top: 2rem; border-top: 1px solid var(--glass-border); padding-top: 1rem;">
+                    <h4 style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.8rem;">Ações Rápidas</h4>
+                    <button onclick="addFixedSalary()" style="background: var(--success); font-size: 0.85rem;">+ Adicionar Salário (R$ 6.200)</button>
+                    <button onclick="addVA()" style="background: #fb923c; font-size: 0.85rem; margin-top: 0.5rem;">+ Adicionar Vale Alimentação</button>
+                </div>
+            </aside>
+        </div>
+
+        <section class="glass-card history-section" style="margin-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3>Meus Empréstimos e Parcelas</h3>
+                <button onclick="toggleDebtForm()" style="width: auto; padding: 0.4rem 1rem; font-size: 0.8rem;">+ Nova Dívida</button>
+            </div>
+            
+            <div id="debt-form-container" class="glass-card" style="display: none; margin-top: 1rem; border-color: var(--primary);">
+                <form id="debt-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Nome (Ex: Empréstimo BB)</label>
+                            <input type="text" id="debt-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor da Parcela (R$)</label>
+                            <input type="number" id="debt-amount" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Total de Parcelas</label>
+                            <input type="number" id="debt-total-installments" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Parcelas já pagas</label>
+                            <input type="number" id="debt-paid-installments" value="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Dia do Vencimento (1-31)</label>
+                            <input type="number" id="debt-due-day" min="1" max="31" value="15" required>
+                        </div>
+                    </div>
+                    <button type="submit">Cadastrar Empréstimo</button>
+                </form>
+            </div>
+
+            <div id="debt-list" class="transaction-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; border: none;">
+                <!-- Debts will be injected here -->
+            </div>
+        </section>
+
+        <section class="glass-card history-section">
+            <h3>Histórico Recente</h3>
+            <div id="transaction-list" class="transaction-list">
+                <!-- Transactions will be injected here -->
+                <p style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhuma transação registrada.</p>
+            </div>
+        </section>
+
+        <footer style="margin-top: 3rem; text-align: center; padding-bottom: 2rem;">
+            <button id="reset-button" style="background: rgba(239, 68, 68, 0.1); color: var(--error); border: 1px solid var(--error); width: auto; padding: 0.5rem 1.5rem; font-size: 0.8rem;">⚠️ Limpar Tudo e Recomeçar</button>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

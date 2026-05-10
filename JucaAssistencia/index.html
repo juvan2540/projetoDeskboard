@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JucaAssistência - Gestão de Manutenção Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon">📱</span>
+                <h2>JucaAssistência</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active" onclick="switchSection('dashboard')">
+                    <span class="icon">📊</span> Dashboard
+                </li>
+                <li onclick="switchSection('services')">
+                    <span class="icon">🔧</span> Ordens de Serviço
+                </li>
+                <li onclick="switchSection('inventory')">
+                    <span class="icon">📦</span> Estoque
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="reset-button" class="btn-outline">⚠️ Limpar Dados</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header class="top-bar">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="global-search" placeholder="Buscar cliente ou serviço..." oninput="searchData()">
+                </div>
+                <div class="user-profile">
+                    <span class="status-dot"></span>
+                    <strong>Bancada Ativa</strong>
+                </div>
+            </header>
+
+            <!-- Section: Dashboard -->
+            <section id="section-dashboard" class="app-section active">
+                <div class="section-header">
+                    <h1>Resumo Geral</h1>
+                    <p>Visão geral do desempenho do seu negócio</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Ganhos Totais</span>
+                        <h2 id="total-income" class="income">R$ 0,00</h2>
+                        <span class="stat-trend">Bruto Recebido</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Lucro Líquido</span>
+                        <h2 id="total-profit" class="balance">R$ 0,00</h2>
+                        <span class="stat-trend">Mão de Obra + Margens</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Investimento</span>
+                        <h2 id="total-expenses" class="expense">R$ 0,00</h2>
+                        <span class="stat-trend">Gasto com Peças</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Serviços Ativos</span>
+                        <h2 id="active-services">0</h2>
+                        <span class="stat-trend">Em andamento</span>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="glass-card chart-box">
+                        <h3>Desempenho Semanal</h3>
+                        <canvas id="profitChart"></canvas>
+                    </div>
+                    <div class="glass-card chart-box">
+                        <h3>Tipos de Serviços</h3>
+                        <canvas id="typeChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Services -->
+            <section id="section-services" class="app-section">
+                <div class="section-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div>
+                            <h1>Ordens de Serviço</h1>
+                            <p>Gerencie seus consertos e orçamentos</p>
+                        </div>
+                        <button onclick="toggleForm('service-form-box')" class="btn-primary">+ Nova OS</button>
+                    </div>
+                </div>
+
+                <!-- Form Modal-like -->
+                <div id="service-form-box" class="glass-card form-overlay" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+                        <h3>Nova Ordem de Serviço</h3>
+                        <button onclick="toggleForm('service-form-box')" class="btn-close">✕</button>
+                    </div>
+                    <form id="service-form" class="pro-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Cliente</label>
+                                <input type="text" id="service-customer" placeholder="Nome Completo" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Telefone</label>
+                                <input type="text" id="service-phone" placeholder="(00) 00000-0000">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Aparelho e Defeito</label>
+                            <input type="text" id="service-desc" placeholder="Ex: iPhone 11 - Troca de Tela" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Custo Peça (R$)</label>
+                                <input type="number" id="service-part-cost" step="0.01" value="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label>Venda Peça (R$)</label>
+                                <input type="number" id="service-part-sell" step="0.01" value="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label>Mão de Obra (R$)</label>
+                                <input type="number" id="service-labor" step="0.01" value="0.00" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Status Inicial</label>
+                            <select id="service-status">
+                                <option value="Aguardando">🟠 Orçamento/Aguardando</option>
+                                <option value="Em Manutenção">🔵 Em Manutenção</option>
+                                <option value="Pronto">🟢 Pronto p/ Retirada</option>
+                                <option value="Entregue">✅ Entregue e Pago</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar Ordem de Serviço</button>
+                    </form>
+                </div>
+
+                <div class="glass-card table-container">
+                    <div id="history-list">
+                        <!-- OS Table will be injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Inventory -->
+            <section id="section-inventory" class="app-section">
+                <div class="section-header">
+                    <h1>Controle de Estoque</h1>
+                    <p>Peças e acessórios disponíveis</p>
+                </div>
+                <div class="main-grid">
+                    <div class="glass-card">
+                        <h3>Registrar Compra</h3>
+                        <form id="parts-form" class="pro-form">
+                            <div class="form-group">
+                                <label>Tipo de Peça</label>
+                                <select id="part-type" required>
+                                    <option value="Display/Tela">📱 Display/Tela</option>
+                                    <option value="Conector Carga">🔌 Conector de Carga</option>
+                                    <option value="Bateria">🔋 Bateria</option>
+                                    <option value="Capa/Case">🛡️ Capa/Case</option>
+                                    <option value="Película">💎 Película</option>
+                                    <option value="Placa Mãe">📟 Placa Mãe</option>
+                                    <option value="Outros">⚙️ Outros</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Modelo</label>
+                                <input type="text" id="part-model" placeholder="Ex: Moto G60" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Qtd</label>
+                                    <input type="number" id="part-qty" min="1" value="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Custo Un. (R$)</label>
+                                    <input type="number" id="part-price" step="0.01" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary">Adicionar ao Estoque</button>
+                        </form>
+                    </div>
+                    <div id="inventory-list" class="glass-card">
+                        <!-- Inventory will be injected here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+    <script src="app.js"></script>
+</body>
+</html>
