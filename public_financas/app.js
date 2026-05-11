@@ -65,7 +65,7 @@ function init() {
     }
 
     // 3. Cleanup garbage
-    transactions = transactions.filter(t => t.amount > 0 && t.description !== 'Salário' && t.amount !== 5000);
+    transactions = transactions.filter(t => t.amount > 0 && t.description !== 'Salário' && t.amount !== 5000 && t.category !== 'Peças/Eletrônicos');
     debts = debts.filter(d => d.dueDay !== 10);
 
     saveToLocalStorage();
@@ -158,76 +158,7 @@ function formatCurrency(value) {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// Parts Form Submission
-document.getElementById('parts-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const type = document.getElementById('part-type').value;
-    const model = document.getElementById('part-model').value;
-    const qty = parseInt(document.getElementById('part-qty').value);
-    const unitPrice = parseFloat(document.getElementById('part-price').value);
-    const totalPrice = qty * unitPrice;
-
-    const newTransaction = {
-        id: Date.now(),
-        description: `Peça: ${type} - ${model} (x${qty})`,
-        amount: totalPrice,
-        category: 'Peças/Eletrônicos',
-        type: 'expense',
-        date: new Date().toISOString()
-    };
-
-    transactions.unshift(newTransaction);
-    saveToLocalStorage();
-    init();
-    
-    e.target.reset();
-    alert(`Compra de ${qty}x ${type} registrada com sucesso!`);
-});
-
-// Service Orders Submission
-document.getElementById('service-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const customer = document.getElementById('service-customer').value;
-    const desc = document.getElementById('service-desc').value;
-    const partCost = parseFloat(document.getElementById('service-part-cost').value) || 0;
-    const partSell = parseFloat(document.getElementById('service-part-sell').value) || 0;
-    const laborValue = parseFloat(document.getElementById('service-labor').value) || 0;
-    
-    const totalCustomerPays = partSell + laborValue;
-    const netProfit = (partSell - partCost) + laborValue;
-
-    // 1. Register Total Income (What the customer paid)
-    const incomeTransaction = {
-        id: Date.now(),
-        description: `Serviço: ${desc} (Cliente: ${customer})`,
-        amount: totalCustomerPays,
-        category: 'Peças/Eletrônicos',
-        type: 'income',
-        date: new Date().toISOString()
-    };
-    transactions.unshift(incomeTransaction);
-
-    // 2. Register Part Cost if > 0 (Expense for you)
-    if (partCost > 0) {
-        const partExpense = {
-            id: Date.now() + 1,
-            description: `Custo de Peça: ${desc} (Cliente: ${customer})`,
-            amount: partCost,
-            category: 'Peças/Eletrônicos',
-            type: 'expense',
-            date: new Date().toISOString()
-        };
-        transactions.unshift(partExpense);
-    }
-
-    saveToLocalStorage();
-    init();
-    
-    e.target.reset();
-    alert(`Serviço de ${customer} finalizado!\nTotal Cobrado: ${formatCurrency(totalCustomerPays)}\nLucro Líquido: ${formatCurrency(netProfit)}`);
-});
+// Os formulários de Assistência (Peças e Serviços) foram removidos para focar em finanças pessoais.
 
 // Update Summary
 function updateSummary() {
@@ -242,24 +173,7 @@ function updateSummary() {
     incomeEl.innerHTML = formatCurrency(income);
     expenseEl.innerHTML = formatCurrency(expense);
 
-    // 2. Business Finances (Assistência)
-    const businessTrans = transactions.filter(t => t.category === 'Peças/Eletrônicos');
-    
-    const bIncomeSum = businessTrans.filter(t => t.type === 'income').reduce((acc, item) => (acc += item.amount), 0);
-    const bServiceExpenseSum = businessTrans.filter(t => t.type === 'expense' && t.description.includes('Custo de Peça')).reduce((acc, item) => (acc += item.amount), 0);
-    const bStockExpenseSum = businessTrans.filter(t => t.type === 'expense' && t.description.includes('Peça:')).reduce((acc, item) => (acc += item.amount), 0);
-
-    const bIncomeDisplay = document.getElementById('business-income');
-    const bProfitDisplay = document.getElementById('business-profit');
-    const bExpenseDisplay = document.getElementById('business-expenses');
-
-    if (bIncomeDisplay) bIncomeDisplay.innerHTML = formatCurrency(bIncomeSum);
-    if (bProfitDisplay) {
-        const netProfitValue = bIncomeSum - bServiceExpenseSum;
-        bProfitDisplay.innerHTML = formatCurrency(netProfitValue);
-        bProfitDisplay.style.color = netProfitValue >= 0 ? 'var(--success)' : 'var(--error)';
-    }
-    if (bExpenseDisplay) bExpenseDisplay.innerHTML = formatCurrency(bStockExpenseSum + bServiceExpenseSum);
+    // 2. Business Finances (Assistência) - REMOVIDO
 }
 
 // Render Transaction List

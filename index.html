@@ -30,6 +30,30 @@
 
     <!-- Hero Section -->
     <section id="inicio" class="hero">
+        <!-- Background Slider -->
+        <div class="hero-slider">
+            <div class="hero-slider-track" id="hero-slider-track">
+                <div class="hero-slide active">
+                    <img src="GaleriaSlider/capa_samsung.png" alt="Especialista Samsung">
+                </div>
+                <div class="hero-slide">
+                    <img src="GaleriaSlider/tecnico_acao.png" alt="Técnico em Ação">
+                </div>
+                <div class="hero-slide">
+                    <img src="GaleriaSlider/meu_avatar_ia.png" alt="Você como Especialista">
+                </div>
+                <div class="hero-slide">
+                    <img src="GaleriaSlider/img1.png" alt="Bancada Profissional">
+                </div>
+                <div class="hero-slide">
+                    <img src="GaleriaSlider/img2.png" alt="Microscópio Eletrônico">
+                </div>
+                <div class="hero-slide">
+                    <img src="GaleriaSlider/img3.png" alt="Aparelho Finalizado">
+                </div>
+            </div>
+        </div>
+        
         <div class="hero-overlay"></div>
         <div class="container hero-content">
             <span class="badge">Especialista em Apple, Samsung e Xiaomi</span>
@@ -123,6 +147,23 @@
     </a>
 
     <script>
+        // Hero Slider Logic
+        const track = document.getElementById('hero-slider-track');
+        const slides = track.querySelectorAll('.hero-slide');
+        let currentIndex = 0;
+
+        function nextHeroSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        setInterval(nextHeroSlide, 5000);
+
+        // OS Status Function (Existing)
         function checkOSStatus() {
             const osNum = document.getElementById('os-number').value.trim();
             const resultBox = document.getElementById('os-result');
@@ -133,7 +174,6 @@
                 return;
             }
 
-            // Get data from localStorage (shared with management app)
             const transactions = JSON.parse(localStorage.getItem('assistencia_transactions')) || [];
             const service = transactions.find(t => t.id.toString() === osNum || t.id.toString().includes(osNum));
 

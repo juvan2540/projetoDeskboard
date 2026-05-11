@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria Premium - JucaAssistência</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="slider-container">
+        <header class="slider-header">
+            <h1>Nossa <span>Galeria</span></h1>
+            <p>Excelência e precisão em cada detalhe de reparo.</p>
+        </header>
+
+        <div class="slider-wrapper">
+            <div class="slider-track" id="slider-track">
+                <!-- Slide 1 -->
+                <div class="slide active">
+                    <img src="minha_foto.jpg" alt="Minha Foto de Reparo">
+                    <div class="slide-caption">
+                        <h3>Meu Trabalho</h3>
+                        <p>Registro real de um dos nossos serviços de precisão.</p>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <img src="img2.png" alt="Laboratório de Eletrônica">
+                    <div class="slide-caption">
+                        <h3>Micro-soldagem Avançada</h3>
+                        <p>Reparos em placa com nível microscópico de detalhamento.</p>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <img src="img3.png" alt="Smartphone Finalizado">
+                    <div class="slide-caption">
+                        <h3>Resultado Impecável</h3>
+                        <p>Seu dispositivo de volta ao estado de novo com garantia total.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <button class="nav-btn prev" id="prev-btn">❮</button>
+            <button class="nav-btn next" id="next-btn">❯</button>
+
+            <!-- Indicators -->
+            <div class="indicators" id="indicators">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+            </div>
+        </div>
+
+        <footer class="slider-footer">
+            <a href="../index.html" class="btn-back">Voltar para Home</a>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

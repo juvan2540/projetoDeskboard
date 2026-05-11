@@ -86,12 +86,55 @@ body {
 
 /* Hero */
 .hero {
-    height: 80vh;
-    background: url('modern_electronics_repair_bench.png') center/cover no-repeat;
+    height: 90vh;
     display: flex;
     align-items: center;
     position: relative;
     color: white;
+    overflow: hidden; /* Prevent slider overflow */
+}
+
+.hero-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-slider-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center; /* Garante a centralização perfeita */
+    filter: brightness(0.6) contrast(1.15) saturate(1.1) sepia(0.05); /* Toque de nitidez e calor */
+    transform: scale(1);
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    image-rendering: auto;
+}
+
+/* Efeito Ken Burns Refinado */
+.hero-slide.active img {
+    animation: kenBurns 12s infinite alternate ease-in-out;
+}
+
+@keyframes kenBurns {
+    from { transform: scale(1.0); }
+    to { transform: scale(1.12); }
 }
 
 .hero-overlay {
@@ -100,12 +143,16 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4));
+    /* Spotlight effect: clareia o centro da sua foto e escurece as bordas */
+    background: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, rgba(15, 23, 42, 0.5) 50%, rgba(15, 23, 42, 0.8) 100%),
+                linear-gradient(to right, rgba(15, 23, 42, 0.7), transparent);
+    z-index: 2;
 }
 
 .hero-content {
     position: relative;
-    max-width: 700px;
+    max-width: 750px;
+    z-index: 3;
 }
 
 .badge {
