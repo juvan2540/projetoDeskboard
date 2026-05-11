@@ -22,6 +22,7 @@
                     <li><a href="#inicio">Início</a></li>
                     <li><a href="#servicos">Serviços</a></li>
                     <li><a href="#consulta">Consultar OS</a></li>
+                    <li><a href="#contato">Contato</a></li>
                     <li><a href="https://wa.me/5511945414499?text=Olá!%20Vi%20o%20site%20da%20JucaAssistência%20e%20gostaria%20de%20solicitar%20um%20orçamento." class="btn-cta-nav">Orçamento WhatsApp</a></li>
                 </ul>
             </nav>
@@ -118,26 +119,80 @@
         </div>
     </section>
 
+    <!-- Contact Section -->
+    <section id="contato" class="contact-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Fale <span>Conosco</span></h2>
+                <p>Mande sua mensagem ou visite nossa loja física.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-form-box">
+                    <form id="contact-form">
+                        <div class="input-group">
+                            <input type="text" id="contact-name" placeholder="Seu Nome completo" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" id="contact-email" placeholder="Seu melhor e-mail" required>
+                        </div>
+                        <div class="input-group">
+                            <textarea id="contact-message" placeholder="Conte-nos o problema do seu aparelho..." rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary-large" id="btn-send-contact">Enviar Mensagem</button>
+                    </form>
+                    <div id="contact-response" class="contact-msg"></div>
+                </div>
+                <div class="contact-details">
+                    <div class="detail-card">
+                        <span class="detail-icon">📧</span>
+                        <div class="detail-text">
+                            <h4>E-mail Profissional</h4>
+                            <p>contato@jucadevsolutions.com.br</p>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <span class="detail-icon">💬</span>
+                        <div class="detail-text">
+                            <h4>WhatsApp</h4>
+                            <p>(11) 94541-4499</p>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <span class="detail-icon">⏰</span>
+                        <div class="detail-text">
+                            <h4>Horário de Atendimento</h4>
+                            <p>Segunda a Sexta: 09h às 18h<br>Sábado: 09h às 13h</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="container footer-grid">
             <div class="footer-brand">
                 <h3>Juca<span>Assistência</span></h3>
-                <p>Qualidade, transparência e rapidez.</p>
+                <p>Especialista em reparos de alta tecnologia.</p>
             </div>
-            <div class="footer-info">
-                <h4>Onde Estamos</h4>
-                <p>📍 Sua Rua, Nº 123 - Bairro - Cidade/UF</p>
-                <p>⏰ Seg a Sex: 09h às 18h | Sáb: 09h às 13h</p>
+            <div class="footer-links">
+                <h4>Links Úteis</h4>
+                <ul>
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
             </div>
             <div class="footer-contact">
-                <h4>Contato</h4>
-                <p>📞 (00) 0000-0000</p>
-                <p>📧 contato@jucaassistencia.com.br</p>
+                <h4>Atendimento</h4>
+                <p>📍 São Paulo - SP</p>
+                <p>📧 contato@jucadevsolutions.com.br</p>
+                <p>📞 (11) 94541-4499</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 JucaAssistência. Todos os direitos reservados.</p>
+            <p>&copy; 2026 JucaAssistência | JucaDev Solutions. Todos os direitos reservados.</p>
         </div>
     </footer>
 
@@ -164,7 +219,8 @@
         setInterval(nextHeroSlide, 5000);
 
         // OS Status Function (Existing)
-        function checkOSStatus() {
+        // OS Status Function (API Based)
+        async function checkOSStatus() {
             const osNum = document.getElementById('os-number').value.trim();
             const resultBox = document.getElementById('os-result');
             
@@ -174,34 +230,76 @@
                 return;
             }
 
-            const transactions = JSON.parse(localStorage.getItem('assistencia_transactions')) || [];
-            const service = transactions.find(t => t.id.toString() === osNum || t.id.toString().includes(osNum));
-
-            if (service) {
-                let statusMsg = "";
-                let color = "";
-                
-                switch(service.status) {
-                    case 'Aguardando': statusMsg = "🟠 Orçamento em análise"; color = "#f59e0b"; break;
-                    case 'Em Manutenção': statusMsg = "🔵 Aparelho na bancada (Em reparo)"; color = "#3b82f6"; break;
-                    case 'Pronto': statusMsg = "🟢 Pronto para retirada! 🎉"; color = "#10b981"; break;
-                    case 'Entregue': statusMsg = "✅ Aparelho entregue ao cliente"; color = "#64748b"; break;
-                    default: statusMsg = "✅ Finalizado"; color = "#10b981";
-                }
-
-                resultBox.innerHTML = `
-                    <div class="success-os">
-                        <h4>Olá, ${service.customer}!</h4>
-                        <p>Status da OS #${service.id}:</p>
-                        <div class="status-badge-web" style="background: ${color}">${statusMsg}</div>
-                        <p style="margin-top: 10px; font-size: 0.9rem;">Aparelho: ${service.description.split('|')[0].replace('Serviço:', '')}</p>
-                    </div>
-                `;
-            } else {
-                resultBox.innerHTML = '<p class="error">Ordem de Serviço não encontrada. Verifique o número e tente novamente.</p>';
-            }
+            resultBox.innerHTML = '<p style="color: var(--text-muted);">Consultando banco de dados...</p>';
             resultBox.style.display = 'block';
+
+            try {
+                const response = await fetch('/api/os');
+                const transactions = await response.json();
+                const service = transactions.find(t => t.id.toString() === osNum || t.id.toString().endsWith(osNum));
+
+                if (service) {
+                    let statusMsg = "";
+                    let color = "";
+                    
+                    switch(service.status) {
+                        case 'Aguardando': statusMsg = "🟠 Orçamento em análise"; color = "#f59e0b"; break;
+                        case 'Em Manutenção': statusMsg = "🔵 Aparelho na bancada (Em reparo)"; color = "#3b82f6"; break;
+                        case 'Pronto': statusMsg = "🟢 Pronto para retirada! 🎉"; color = "#10b981"; break;
+                        case 'Entregue': statusMsg = "✅ Aparelho entregue ao cliente"; color = "#64748b"; break;
+                        default: statusMsg = "✅ Finalizado"; color = "#10b981";
+                    }
+
+                    resultBox.innerHTML = `
+                        <div class="success-os">
+                            <h4>Olá, ${service.customer}!</h4>
+                            <p>Status da OS #${service.id}:</p>
+                            <div class="status-badge-web" style="background: ${color}">${statusMsg}</div>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Aparelho: ${service.description.split('|')[0].replace('Serviço:', '')}</p>
+                        </div>
+                    `;
+                } else {
+                    resultBox.innerHTML = '<p class="error">Ordem de Serviço não encontrada. Verifique o número e tente novamente.</p>';
+                }
+            } catch (error) {
+                console.error(error);
+                resultBox.innerHTML = '<p class="error">Erro ao conectar com o servidor. Tente novamente mais tarde.</p>';
+            }
         }
+
+        // Contact Form Logic
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-send-contact');
+            const status = document.getElementById('contact-response');
+            
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            btn.disabled = true;
+            btn.innerText = 'Enviando...';
+
+            try {
+                const response = await fetch('/api/contato', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, message })
+                });
+
+                if (response.ok) {
+                    status.innerHTML = '<p style="color: #10b981; margin-top: 15px;">✅ Mensagem enviada! Você receberá um e-mail de confirmação em instantes.</p>';
+                    e.target.reset();
+                } else {
+                    throw new Error();
+                }
+            } catch (error) {
+                status.innerHTML = '<p style="color: #ef4444; margin-top: 15px;">❌ Erro ao enviar. Tente pelo WhatsApp.</p>';
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Enviar Mensagem';
+            }
+        });
     </script>
 </body>
 </html>
