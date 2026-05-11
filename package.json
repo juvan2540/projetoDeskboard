@@ -1,6 +1,7 @@
 {
   "name": "projeto-deskboard",
   "version": "1.0.0",
+  "type": "module",
   "description": "JucaAssistência & JucaFinanças Dashboard",
   "main": "index.html",
   "scripts": {
