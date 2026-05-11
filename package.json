@@ -1,0 +1,17 @@
+{
+  "name": "projeto-deskboard",
+  "version": "1.0.0",
+  "description": "JucaAssistência & JucaFinanças Dashboard",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
