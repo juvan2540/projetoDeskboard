@@ -17,6 +17,11 @@
                 <span class="logo-icon">📱</span>
                 <span class="logo-text">Juca<span>Assistência</span></span>
             </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <nav>
                 <ul class="nav-links">
                     <li><a href="#inicio">Início</a></li>
@@ -215,6 +220,22 @@
                 slide.classList.toggle('active', index === currentIndex);
             });
         }
+
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenu.classList.toggle('is-active');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
 
         setInterval(nextHeroSlide, 5000);
 
