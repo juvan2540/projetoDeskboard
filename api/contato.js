@@ -53,7 +53,7 @@ export default async function handler(request, response) {
         })
       });
 
-      // E-mail para o Administrador (Notificação)
+      // E-mail para o Administrador (Notificação) - Enviando para o Gmail verificado
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -62,9 +62,21 @@ export default async function handler(request, response) {
         },
         body: JSON.stringify({
           from: 'Sistema Juca <onboarding@resend.dev>',
-          to: 'contato@jucadevsolutions.com.br', // Email do dono
+          to: 'juvansantosforte@gmail.com', // E-mail verificado no Resend
           subject: `NOVO ORÇAMENTO: ${name}`,
-          html: `<p><strong>Nome:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Mensagem:</strong> ${message}</p>`
+          html: `
+            <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee;">
+              <h2 style="color: #2563eb;">Novo Pedido de Orçamento</h2>
+              <p><strong>Cliente:</strong> ${name}</p>
+              <p><strong>E-mail do Cliente:</strong> ${email}</p>
+              <p><strong>Mensagem:</strong></p>
+              <div style="background: #f1f5f9; padding: 15px; border-radius: 5px;">
+                ${message}
+              </div>
+              <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+              <p style="font-size: 12px; color: #94a3b8;">Este e-mail foi enviado automaticamente pelo seu site.</p>
+            </div>
+          `
         })
       });
     } else {
