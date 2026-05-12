@@ -27,6 +27,7 @@
                     <li><a href="#inicio">Início</a></li>
                     <li><a href="#servicos">Serviços</a></li>
                     <li><a href="#consulta">Consultar OS</a></li>
+                    <li><a href="#suporte">Suporte</a></li>
                     <li><a href="#contato">Contato</a></li>
                     <li><a href="https://wa.me/5511945414499?text=Olá!%20Vi%20o%20site%20da%20JucaAssistência%20e%20gostaria%20de%20solicitar%20um%20orçamento." class="btn-cta-nav">Orçamento WhatsApp</a></li>
                 </ul>
@@ -120,6 +121,58 @@
                 <div class="consult-image">
                     <img src="https://img.icons8.com/bubbles/200/search.png" alt="Search icon">
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support & FAQ Section -->
+    <section id="suporte" class="faq-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Central de <span>Ajuda</span></h2>
+                <p>Tire suas dúvidas rápidas sobre nossos serviços e processos.</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Quanto tempo leva um reparo comum?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Trocas de tela e bateria geralmente são feitas em até 2 horas (consulte disponibilidade de estoque). Reparos em placa podem levar de 2 a 5 dias úteis devido à complexidade.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Os serviços têm garantia?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sim! Todos os nossos reparos possuem garantia de 90 dias (3 meses) contra defeitos de fabricação da peça ou falha na execução do serviço.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Preciso formatar meu aparelho antes de trazer?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Não é necessário, mas recomendamos sempre que possível realizar um backup dos seus dados. Para reparos de software ou placa, os dados podem ser perdidos.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Vocês buscam o aparelho em casa?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sim, trabalhamos com serviço de leva e traz via portador de confiança. Consulte a taxa de deslocamento para a sua região pelo nosso WhatsApp.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="support-cta">
+                <p>Ainda tem dúvidas? Fale com um técnico agora mesmo.</p>
+                <a href="https://wa.me/5511945414499?text=Olá!%20Preciso%20de%20ajuda%20com%20um%20suporte%20técnico." class="btn-secondary-large">Chamar Suporte Técnico</a>
             </div>
         </div>
     </section>
@@ -234,6 +287,21 @@
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
+            });
+        });
+
+        // FAQ Accordion Logic
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all other items
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                
+                if (!isActive) {
+                    item.classList.add('active');
+                }
             });
         });
 
