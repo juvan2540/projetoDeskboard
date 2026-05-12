@@ -241,7 +241,7 @@ window.searchData = function() {
     renderHistory(term);
 };
 
-// PDF Logic
+// PDF Logic (Premium Receipt)
 window.downloadPDF = function(id) {
     const { jsPDF } = window.jspdf;
     const record = transactions.find(t => t.id == id);
@@ -249,32 +249,90 @@ window.downloadPDF = function(id) {
 
     const customerName = record.customer || 'Cliente';
     const serviceName = record.description.split('|')[0].replace('Serviço:', '').trim();
+    const amount = parseFloat(record.amount);
+    const dateStr = new Date(record.date).toLocaleDateString('pt-BR');
+    
     const expiryDate = new Date(record.date);
     expiryDate.setMonth(expiryDate.getMonth() + 3);
 
     const doc = new jsPDF();
+    
+    // Header & Brand
+    doc.setFillColor(37, 99, 235); // Blue Primary
+    doc.rect(0, 0, 210, 40, 'F');
+    
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.setTextColor(37, 99, 235);
-    doc.text("JUCA ASSISTÊNCIA", 105, 20, { align: "center" });
+    doc.setFontSize(24);
+    doc.setTextColor(255, 255, 255);
+    doc.text("JUCA ASSISTÊNCIA", 105, 25, { align: "center" });
     
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`CLIENTE: ${customerName.toUpperCase()}`, 20, 45);
-    doc.text(`OS Nº: #${record.id}`, 20, 52);
-    doc.text(`STATUS: ${record.status}`, 20, 59);
+    doc.setFontSize(10);
+    doc.text("SOLUÇÕES EM TECNOLOGIA E REPAROS AVANÇADOS", 105, 33, { align: "center" });
 
-    doc.setFillColor(241, 245, 249);
-    doc.rect(20, 70, 170, 10, 'F');
-    doc.text("DESCRIÇÃO", 25, 76.5);
-    doc.text("TOTAL", 185, 76.5, { align: "right" });
+    // Body Info
+    doc.setTextColor(30, 41, 59);
+    doc.setFontSize(12);
+    doc.text(`ORDEM DE SERVIÇO: #${record.id}`, 20, 55);
+    doc.text(`DATA DE EMISSÃO: ${dateStr}`, 140, 55);
+    
+    doc.setDrawColor(226, 232, 240);
+    doc.line(20, 60, 190, 60);
 
+    doc.setFont("helvetica", "bold");
+    doc.text("DADOS DO CLIENTE", 20, 70);
     doc.setFont("helvetica", "normal");
-    doc.text(serviceName, 25, 89);
-    doc.text(formatCurrency(record.amount), 185, 89, { align: "right" });
-    doc.text("GARANTIA DE 90 DIAS VÁLIDA ATÉ: " + expiryDate.toLocaleDateString('pt-BR'), 20, 120);
+    doc.text(`NOME: ${customerName.toUpperCase()}`, 20, 78);
     
-    doc.save(`OS_${record.id}_${customerName}.pdf`);
+    // Table Header
+    doc.setFillColor(248, 250, 252);
+    doc.rect(20, 90, 170, 10, 'F');
+    doc.setFont("helvetica", "bold");
+    doc.text("DESCRIÇÃO DO SERVIÇO", 25, 96.5);
+    doc.text("VALOR TOTAL", 185, 96.5, { align: "right" });
+
+    // Table Content
+    doc.setFont("helvetica", "normal");
+    doc.text(serviceName, 25, 110);
+    doc.setFont("helvetica", "bold");
+    doc.text(formatCurrency(amount), 185, 110, { align: "right" });
+
+    // Totals Box
+    doc.setFillColor(37, 99, 235);
+    doc.rect(130, 125, 60, 15, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.text("TOTAL PAGO:", 135, 134.5);
+    doc.text(formatCurrency(amount), 185, 134.5, { align: "right" });
+
+    // Warranty Section
+    doc.setTextColor(30, 41, 59);
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text("TERMOS DE GARANTIA", 20, 160);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    const terms = [
+        "1. Garantia limitada de 90 dias a partir da data de entrega.",
+        "2. A garantia cobre apenas o componente substituído ou o serviço realizado.",
+        "3. Abertura do aparelho por terceiros ou danos por líquidos anulam esta garantia.",
+        "4. É indispensável a apresentação deste recibo para qualquer reclamação."
+    ];
+    doc.text(terms, 20, 168);
+    
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.text("GARANTIA VÁLIDA ATÉ: " + expiryDate.toLocaleDateString('pt-BR'), 20, 195);
+
+    // Footer Signature
+    doc.setDrawColor(30, 41, 59);
+    doc.line(120, 240, 180, 240);
+    doc.setFontSize(9);
+    doc.text("ASSINATURA DO TÉCNICO", 150, 245, { align: "center" });
+    
+    doc.setFontSize(8);
+    doc.setTextColor(148, 163, 184);
+    doc.text("Documento gerado eletronicamente por JucaAssistência Pro", 105, 285, { align: "center" });
+
+    doc.save(`Recibo_OS_${record.id}_${customerName.replace(/ /g, '_')}.pdf`);
 };
 
 init();
